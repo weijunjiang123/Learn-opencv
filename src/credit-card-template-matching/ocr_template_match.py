@@ -37,7 +37,9 @@ ref = cv2.threshold(ref, 30, 255, cv2.THRESH_BINARY_INV)[1]
 # cv_show('ref', ref)
 
 # 计算轮廓
-refCnts, hierarchy = cv2.findContours(ref.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+resimage, refCnts, hierarchy = cv2.findContours(ref.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# refCnts, hierarchy,  = cv2.findContours(ref.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 # 画出轮廓
 cv2.drawContours(img, refCnts, -1, (0, 0, 255), 3)
@@ -94,7 +96,7 @@ thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, sqKernel)
 # cv_show('thresh', thresh)
 
 # 计算轮廓
-threshCnts, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+resimage, threshCnts, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 cnts = threshCnts
 cur_img = image.copy()
 cv2.drawContours(cur_img, cnts, -1, (0, 0, 255), 3)
@@ -129,7 +131,7 @@ for (i, (gX, gY, gW, gH)) in enumerate(locs):
     group = cv2.threshold(group, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
     # cv_show('group', group)
     # 计算每一组的轮廓
-    digitCnts, hierarchy = cv2.findContours(group.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    resimage, digitCnts, hierarchy = cv2.findContours(group.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     digitCnts = myutils.sort_contours(digitCnts, method="left-to-right")[0]
 
     # 计算每一组中的每一个数值
@@ -160,8 +162,8 @@ for (i, (gX, gY, gW, gH)) in enumerate(locs):
     output.extend(groupOutput)
 
 # 打印结果
-print("Credit Card Type: {}".format(FIRST_NUMBER[output[0]]))
-print("Credit Card #: {}".format("".join(output)))
+# print("Credit Card Type: {}".format(FIRST_NUMBER[output[0]]))
+# print("Credit Card #: {}".format("".join(output)))
 cv2.imshow("Image", image)
 cv2.waitKey(0)
 
